@@ -3,7 +3,7 @@ import numpy as np
 MESH_DIR = "mesh"
 
 
-from models import Nodes, Elements, Edges
+from models import Nodes, Elements
 
 
 def load_meshes():

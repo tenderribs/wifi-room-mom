@@ -3,11 +3,12 @@ import numpy as np
 from enum import IntEnum
 from dataclasses import dataclass, fields
 
-# # for later from COMSOL output
-# class Domain(IntEnum):
-#     AIR = 1
-#     METAL = 2
-#     CONCRETE = 3
+
+# for later from COMSOL output
+class Domain(IntEnum):
+    AIR = 1
+    METAL = 2
+    CONCRETE = 3
 
 
 @dataclass(frozen=True)
