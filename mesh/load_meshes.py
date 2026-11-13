@@ -11,7 +11,7 @@ def load_meshes():
     elements_np = np.loadtxt(f"{MESH_DIR}/elements.txt", dtype=int)
     domains_np = np.loadtxt(f"{MESH_DIR}/domains.txt", dtype=int)
 
-    nodes = Nodes(nodes_np)
+    nodes = Nodes(xy=nodes_np)
     elements = Elements(node_idxs=elements_np, domains=domains_np)
 
     return nodes, elements

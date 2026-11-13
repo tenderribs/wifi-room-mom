@@ -15,14 +15,6 @@ class Domain(IntEnum):
 class Nodes:
     xy: np.ndarray
 
-    @property
-    def x(self):
-        return self.xy[:, 0]
-
-    @property
-    def y(self):
-        return self.xy[:, 1]
-
 
 @dataclass(frozen=True)
 class Edges:
