@@ -12,8 +12,16 @@ class Stadium:
     y: float
     length: float  # length of the straight part
     r: float  # radius of the round ends (half the thickness)
+    domain: Domain
     angle: float = 0.0  # rotation about the centre [rad]
-    domain: Domain = Domain.METAL
+
+
+@dataclass
+class Circle:
+    x: float  # centre
+    y: float
+    r: float  # radius
+    domain: Domain
 
 
 def add_stadium(s: Stadium) -> int:
@@ -49,7 +57,7 @@ def add_stadium(s: Stadium) -> int:
 
 def gen_meshes(
     box: tuple[float, float, float, float],  # x_min, y_min, x_max, y_max
-    shapes: list[Stadium],  # Can add other shapes later
+    shapes: list[Stadium | Circle],
     h_far: float,  # element size far from the objects
     h_shape: float,  # element size on/near the object boundaries
     out_dir: str | Path = "mesh/generated",
@@ -65,7 +73,11 @@ def gen_meshes(
 
     objs = []
     for s in shapes:
-        objs.append(add_stadium(s))
+        if type(s) == Stadium:
+            objs.append(add_stadium(s))
+        elif type(s) == Circle:
+            objs.append(occ.addDisk(s.x, s.y, 0, s.r, s.r))
+
     obj_dimtags = [(2, t) for t in objs]
 
     # fragment = split everything at intersections so that the air and the
@@ -75,7 +87,7 @@ def gen_meshes(
     # its pieces include the shape interiors too -> air = box pieces owned by no shape.
     _, out_map = occ.fragment([(2, air)], obj_dimtags)
 
-    owner: dict[int, Stadium] = {}  # surface tag -> shape it came from
+    owner: dict[int, Stadium | Circle] = {}  # surface tag -> shape it came from
     for s, pieces in zip(shapes, out_map[1:]):
         for _, t in pieces:
             if t in owner:
